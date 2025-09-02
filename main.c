@@ -11,7 +11,8 @@
 #define clk_source (1<<2)
 #define count (1<<16)
 #define red_led (1<<1)
-#define sw_2 (1)
+#define blue_led (1<<2)
+#define sw_1 (1<<4)
 
 int main(void){
 
@@ -26,7 +27,8 @@ int main(void){
     GPIO_PORTF_DATA_R = 0x0;
 
     while(1){
-        stctrl |= enable;
+        toggle_blue();
+       stctrl |= enable;
        while ((stctrl & count) == 0);
         GPIO_PORTF_DATA_R ^= red_led;
         //// disable timer
@@ -35,3 +37,13 @@ int main(void){
 
     }
 }
+
+void toggle_blue(void){
+    if((GPIO_PORTF_DATA_R & sw_1 ) == 0x00){
+        GPIO_PORTF_DATA_R |= blue_led;
+    }
+    else {
+        GPIO_PORTF_DATA_R &= ~blue_led;
+    }
+}
+
